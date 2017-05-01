@@ -44,8 +44,18 @@ export function redo() {
   return (ActionCreators.redo());
 }
 
+
+export function drawCell(cellIndex, frameIndex, color) {
+  return {
+    type: actions.DRAW_CELL,
+    cellIndex,
+    frameIndex,
+    color
+  };
+}
+
 export function cellClicked(index, frameIndex, activeTool, cellColor, currentColor) {
-  // Your code here.
+  return drawCell(index, frameIndex, currentColor);
 }
 
 export function setActiveTool(toolName) {

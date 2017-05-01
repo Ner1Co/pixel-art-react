@@ -3,6 +3,7 @@ export const SET_CELL_SIZE = 'SET_CELL_SIZE';
 export const SET_DURATION = 'SET_DURATION';
 export const SHOW_SPINNER = 'SHOW_SPINNER';
 export const HIDE_SPINNER = 'HIDE_SPINNER';
+export const DRAW_CELL = 'DRAW_CELL';
 
 
 

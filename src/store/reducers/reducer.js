@@ -51,6 +51,22 @@ function animationDuration(state, action) {
 }
 
 /**
+ * Reducer for handling all the frames state.
+ */
+function frames(state, action) {
+  switch (action.type) {
+    case actions.DRAW_CELL:
+      return state.map((frame, index) => {
+        return (index === action.frameIndex)
+          ? setFrameCellColor(frame, action.cellIndex, action.color)
+          : frame;
+      });
+    default:
+      return state;
+  }
+}
+
+/**
  * Root reducer.
  */
 export default function (state = exampleState, action) {
@@ -62,7 +78,8 @@ export default function (state = exampleState, action) {
         ...state,
         loading: loading(state.loading, action),
         cellSize: cellSize(state.cellSize, action),
-        animationDuration: animationDuration(state.animationDuration, action)
+        animationDuration: animationDuration(state.animationDuration, action),
+        frames: frames(state.frames, action)
       };
   }
 }
