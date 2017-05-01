@@ -37,7 +37,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  // Your code here.
+  actions: bindActionCreators(actionCreators, dispatch)
 });
 
 const DimensionsContainer = connect(

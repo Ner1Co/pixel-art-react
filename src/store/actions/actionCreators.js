@@ -62,6 +62,13 @@ export function setActiveTool(toolName) {
   // Your code here.
 }
 
+export function resetGrid(frameIndex) {
+  return {
+    type: actions.RESET_GRID,
+    frameIndex
+  };
+}
+
 export function changeActiveFrame(frameIndex) {
   return {
     type: actions.CHANGE_ACTIVE_FRAME,
@@ -73,6 +80,29 @@ export function createNewFrame() {
   return {
     type: actions.CREATE_NEW_FRAME,
     key: shortid.generate()
+  };
+}
+
+export function deleteFrame(frameId) {
+  return {
+    type: actions.DELETE_FRAME,
+    frameId
+  };
+}
+
+export function duplicateFrame(frameId) {
+  return {
+    type: actions.DUPLICATE_FRAME,
+    frameId,
+    key: shortid.generate()
+  };
+}
+
+export function changeDimensions(rows, columns) {
+  return {
+    type: actions.CHANGE_DIMENSIONS,
+    rows,
+    columns
   };
 }
 

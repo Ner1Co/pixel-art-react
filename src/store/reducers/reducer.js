@@ -64,18 +64,37 @@ function frames(state, action, activeFrameIndex) {
           ? setFrameCellColor(frame, action.cellIndex, action.color)
           : frame;
       });
+    case actions.RESET_GRID:
+      return state.map((frame, index) => {
+        return (index === activeFrameIndex)
+          ? createFrame(frame.rows, frame.columns, GRID_BACKGROUND_COLOR, frame.interval, frame.key)
+          : frame;
+      });
     case actions.CREATE_NEW_FRAME:
       return resetIntervals([
         ...state,
         createFrame(state[activeFrameIndex].rows, state[activeFrameIndex].columns,
           GRID_BACKGROUND_COLOR, 100, action.key)
       ]);
+    case actions.DUPLICATE_FRAME:
+      return resetIntervals(
+        state.slice(0, action.frameId + 1)
+        .concat(cloneFrame(state[action.frameId], action.key))
+        .concat(state.slice(action.frameId + 1))
+      );
+    case actions.DELETE_FRAME:
+      return state.length > 1
+        ? resetIntervals(state.slice(0, action.frameId).concat(state.slice(action.frameId + 1)))
+        : [createFrame(state[activeFrameIndex].rows, state[activeFrameIndex].columns,
+            GRID_BACKGROUND_COLOR, 100)];
     case actions.CHANGE_FRAME_INTERVAL:
       return state.map((frame, index) => {
         return index === action.frameIndex
           ? { ...frame, interval: action.interval }
           : frame;
       });
+    case actions.CHANGE_DIMENSIONS:
+      return state.map(frame => resizeFrame(frame, action.rows, action.columns));
     default:
       return state;
   }
@@ -86,10 +105,17 @@ function frames(state, action, activeFrameIndex) {
  */
 function activeFrameIndex(state, action) {
   switch (action.type) {
+    case actions.DUPLICATE_FRAME:
+      return action.frameId + 1;
     case actions.CREATE_NEW_FRAME:
       return state + 1;
     case actions.CHANGE_ACTIVE_FRAME:
       return action.frameIndex;
+    case actions.DELETE_FRAME:
+      if (action.frameId > 0) {
+        return action.frameId - 1;
+      }
+      return state;
     default:
       return state;
   }

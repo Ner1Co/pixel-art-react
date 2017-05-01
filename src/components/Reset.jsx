@@ -6,6 +6,10 @@ import * as actionCreators from '../store/actions/actionCreators';
 import { framesSelector } from '../store/selectors/selectors';
 
 const Reset = (props) => {
+  function handleClick() {
+    props.resetGrid(props.activeFrameIndex);
+  }
+
   return (
     <button
       className="reset"
@@ -21,7 +25,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  // Your code here.
+  resetGrid: activeFrameIndex => dispatch(actionCreators.resetGrid(activeFrameIndex))
 });
 
 const ResetContainer = connect(
