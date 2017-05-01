@@ -64,6 +64,12 @@ function frames(state, action, activeFrameIndex) {
           ? setFrameCellColor(frame, action.cellIndex, action.color)
           : frame;
       });
+    case actions.CLEAR_CELL:
+      return state.map((frame, index) => {
+        return (index === action.frameIndex)
+          ? clearFrameCell(frame, action.cellIndex)
+          : frame;
+      });
     case actions.RESET_GRID:
       return state.map((frame, index) => {
         return (index === activeFrameIndex)
@@ -95,6 +101,12 @@ function frames(state, action, activeFrameIndex) {
       });
     case actions.CHANGE_DIMENSIONS:
       return state.map(frame => resizeFrame(frame, action.rows, action.columns));
+    case actions.APPLY_BUCKET_ON_CELL:
+      return state.map((frame, index) => {
+        return index === activeFrameIndex
+          ? applyBucket(frame, action.cellIndex, action.color)
+          : frame;
+      });
     default:
       return state;
   }
@@ -122,6 +134,73 @@ function activeFrameIndex(state, action) {
 }
 
 /**
+ * Reducer for the current active tool state.
+ */
+function activeTool(state, action) {
+  switch (action.type) {
+    case actions.SET_ACTIVE_TOOL:
+      return (state === tools.bucket && action.tool === tools.bucket) ? tools.brush : action.tool;
+    case actions.SET_CURRENT_COLOR:
+      return state === tools.eraser || state === tools.eyedropper ? tools.brush : state;
+    case actions.SET_CUSTOM_COLOR:
+      if (state !== tools.brush && state !== tools.bucket) {
+        return tools.brush;
+      }
+      return state;
+    default:
+      return state;
+  }
+}
+
+/**
+ * Reducer for the current selected color.
+ */
+function currentColor(state, action) {
+  switch (action.type) {
+    case actions.SET_CURRENT_COLOR:
+      return action.color;
+    case actions.SET_CUSTOM_COLOR:
+      return action.customColor;
+    case actions.SET_ACTIVE_TOOL:
+      if (action.tool === tools.eraser) {
+        return null;
+      }
+      return state;
+    default:
+      return state;
+  }
+}
+
+/**
+ * Reducer palette selected cell.
+ */
+function paletteSelectedCell(state, action) {
+  switch (action.type) {
+    case actions.SET_CURRENT_COLOR:
+      return action.paletteColorPosition;
+    default:
+      return state;
+  }
+}
+
+/**
+ * Reducer for the palette colors.
+ */
+function paletteGridColors(state, action) {
+  switch (action.type) {
+    case actions.SET_CUSTOM_COLOR:
+      return state.map((cell, index) => {
+        if (action.paletteColorPosition === index) {
+          return { color: action.customColor, id: action.paletteColorPosition };
+        }
+        return cell;
+      });
+    default:
+      return state;
+  }
+}
+
+/**
  * Root reducer.
  */
 export default function (state = newProject(), action) {
@@ -136,6 +215,10 @@ export default function (state = newProject(), action) {
         animationDuration: animationDuration(state.animationDuration, action),
         frames: frames(state.frames, action, state.activeFrameIndex),
         activeFrameIndex: activeFrameIndex(state.activeFrameIndex, action),
+        activeTool: activeTool(state.activeTool, action),
+        currentColor: currentColor(state.currentColor, action),
+        paletteSelectedCell: paletteSelectedCell(state.paletteSelectedCell, action),
+        paletteGridColors: paletteGridColors(state.paletteGridColors, action)
       };
   }
 }

@@ -36,14 +36,28 @@ export function hideSpinner() {
   };
 }
 
-export function undo() {
-  return (ActionCreators.undo());
+export function setCurrentColor(color, paletteColorPosition) {
+  return {
+    type: actions.SET_CURRENT_COLOR,
+    color,
+    paletteColorPosition
+  };
 }
 
-export function redo() {
-  return (ActionCreators.redo());
+export function setActiveTool(toolName) {
+  return {
+    type: actions.SET_ACTIVE_TOOL,
+    tool: toolName
+  };
 }
 
+export function setCustomColor(customColor, paletteColorPosition) {
+  return {
+    type: actions.SET_CUSTOM_COLOR,
+    customColor,
+    paletteColorPosition
+  };
+}
 
 export function drawCell(cellIndex, frameIndex, color) {
   return {
@@ -54,12 +68,35 @@ export function drawCell(cellIndex, frameIndex, color) {
   };
 }
 
-export function cellClicked(index, frameIndex, activeTool, cellColor, currentColor) {
-  return drawCell(index, frameIndex, currentColor);
+export function clearCell(cellIndex, frameIndex) {
+  return {
+    type: actions.CLEAR_CELL,
+    cellIndex,
+    frameIndex
+  };
 }
 
-export function setActiveTool(toolName) {
-  // Your code here.
+export function applyBucketOnCell(cellIndex, frameIndex, color) {
+  return {
+    type: actions.APPLY_BUCKET_ON_CELL,
+    cellIndex,
+    frameIndex,
+    color
+  };
+}
+
+export function cellClicked(index, frameIndex, activeTool, cellColor, currentColor) {
+  switch (activeTool) {
+    case tools.eraser:
+      return clearCell(index, frameIndex);
+    case tools.eyedropper:
+      return setCurrentColor(cellColor);
+    case tools.bucket:
+      return applyBucketOnCell(index, frameIndex, currentColor);
+    case tools.brush:
+    default:
+      return drawCell(index, frameIndex, currentColor);
+  }
 }
 
 export function resetGrid(frameIndex) {
@@ -112,4 +149,12 @@ export function changeFrameInterval(frameIndex, interval) {
     frameIndex,
     interval
   };
+}
+
+export function undo() {
+  return (ActionCreators.undo());
+}
+
+export function redo() {
+  return (ActionCreators.redo());
 }

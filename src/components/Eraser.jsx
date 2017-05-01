@@ -20,7 +20,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  //actions : bindActionCreators(actionCreators, dispatch)
+  onClick: () => dispatch(actionCreators.setActiveTool(tools.eraser))
 });
 
 const EraserContainer = connect(

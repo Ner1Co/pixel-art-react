@@ -20,7 +20,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  // Your code here.
+  onClick: () => dispatch(actionCreators.setActiveTool(tools.eyedropper))
 });
 
 const EyedropperContainer = connect(

@@ -81,11 +81,12 @@ class ColorPicker extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  // Your code here.
+  colorPickerOn: state.present.activeTool === tools.colorPicker,
+  paletteSelectedCell: state.present.paletteSelectedCell
 });
 
 const mapDispatchToProps = dispatch => ({
-  // Your code here.
+  actions: bindActionCreators(actionCreators, dispatch)
 });
 
 const ColorPickerContainer = connect(
