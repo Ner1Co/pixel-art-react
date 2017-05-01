@@ -12,6 +12,9 @@ import {
 import exampleState from '../../utils/exampleState';
 import newProject from '../../utils/newProject';
 
+// Default background color.
+const GRID_BACKGROUND_COLOR = '#313131';
+
 /**
  * Reducer for application loading state.
  */
@@ -53,12 +56,24 @@ function animationDuration(state, action) {
 /**
  * Reducer for handling all the frames state.
  */
-function frames(state, action) {
+function frames(state, action, activeFrameIndex) {
   switch (action.type) {
     case actions.DRAW_CELL:
       return state.map((frame, index) => {
         return (index === action.frameIndex)
           ? setFrameCellColor(frame, action.cellIndex, action.color)
+          : frame;
+      });
+    case actions.CREATE_NEW_FRAME:
+      return resetIntervals([
+        ...state,
+        createFrame(state[activeFrameIndex].rows, state[activeFrameIndex].columns,
+          GRID_BACKGROUND_COLOR, 100, action.key)
+      ]);
+    case actions.CHANGE_FRAME_INTERVAL:
+      return state.map((frame, index) => {
+        return index === action.frameIndex
+          ? { ...frame, interval: action.interval }
           : frame;
       });
     default:
@@ -67,9 +82,23 @@ function frames(state, action) {
 }
 
 /**
+ * Reducer for the current frame index.
+ */
+function activeFrameIndex(state, action) {
+  switch (action.type) {
+    case actions.CREATE_NEW_FRAME:
+      return state + 1;
+    case actions.CHANGE_ACTIVE_FRAME:
+      return action.frameIndex;
+    default:
+      return state;
+  }
+}
+
+/**
  * Root reducer.
  */
-export default function (state = exampleState, action) {
+export default function (state = newProject(), action) {
   switch (action.type) {
     case actions.NEW_PROJECT:
       return newProject(state);
@@ -79,7 +108,8 @@ export default function (state = exampleState, action) {
         loading: loading(state.loading, action),
         cellSize: cellSize(state.cellSize, action),
         animationDuration: animationDuration(state.animationDuration, action),
-        frames: frames(state.frames, action)
+        frames: frames(state.frames, action, state.activeFrameIndex),
+        activeFrameIndex: activeFrameIndex(state.activeFrameIndex, action),
       };
   }
 }

@@ -61,3 +61,25 @@ export function cellClicked(index, frameIndex, activeTool, cellColor, currentCol
 export function setActiveTool(toolName) {
   // Your code here.
 }
+
+export function changeActiveFrame(frameIndex) {
+  return {
+    type: actions.CHANGE_ACTIVE_FRAME,
+    frameIndex
+  };
+}
+
+export function createNewFrame() {
+  return {
+    type: actions.CREATE_NEW_FRAME,
+    key: shortid.generate()
+  };
+}
+
+export function changeFrameInterval(frameIndex, interval) {
+  return {
+    type: actions.CHANGE_FRAME_INTERVAL,
+    frameIndex,
+    interval
+  };
+}
