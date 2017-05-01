@@ -18,7 +18,9 @@ const NewProject = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // Your code here.
+    onClick: () => dispatch(actionCreators.newProject())
+    // Equivalent to:
+    // onClick: bindActionCreators(actionCreators.newProject, dispatch)
   };
 };
 

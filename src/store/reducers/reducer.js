@@ -54,11 +54,16 @@ function animationDuration(state, action) {
  * Root reducer.
  */
 export default function (state = exampleState, action) {
-  return {
-    ...state,
-    loading: loading(state.loading, action),
-    cellSize: cellSize(state.cellSize, action),
-    animationDuration: animationDuration(state.animationDuration, action)
-  };
+  switch (action.type) {
+    case actions.NEW_PROJECT:
+      return newProject(state);
+    default:
+      return {
+        ...state,
+        loading: loading(state.loading, action),
+        cellSize: cellSize(state.cellSize, action),
+        animationDuration: animationDuration(state.animationDuration, action)
+      };
+  }
 }
 
