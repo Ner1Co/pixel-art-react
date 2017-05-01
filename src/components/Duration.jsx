@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
 import * as actionCreators from '../store/actions/actionCreators';
+import { settingsSelector } from '../store/selectors/selectors';
 
 const Duration = (props) => {
   const handleChange = (event) => {
@@ -10,7 +12,7 @@ const Duration = (props) => {
   return (
     <div className="duration">
       <label htmlFor="duration__input">
-        Duration
+        Duration (sec)
       </label>
       <input
         type="number"
@@ -23,7 +25,7 @@ const Duration = (props) => {
 };
 
 const mapStateToProps = state => ({
-  duration: state.present.get('duration')
+  duration: settingsSelector(state).animationDuration
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,5 +1,4 @@
 import React from 'react';
-import { List } from 'immutable';
 import Preview from './Preview';
 
 export default class Frame extends React.Component {
@@ -38,7 +37,7 @@ export default class Frame extends React.Component {
         onClick={() => { this.handleClick(); }}
       >
         <Preview
-          frames={List([this.props.frame])}
+          frames={[this.props.frame]}
           columns={this.props.columns}
           rows={this.props.rows}
           cellSize={2}
@@ -54,7 +53,7 @@ export default class Frame extends React.Component {
         />
         <input
           type="number"
-          value={this.props.frame.get('interval')}
+          value={this.props.frame.interval}
           onChange={(event) => { this.changeInterval(event); }}
           className="frame__percentage"
           ref={(c) => { this.percentage = c; }}

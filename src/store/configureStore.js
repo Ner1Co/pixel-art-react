@@ -1,54 +1,25 @@
 import { createStore } from 'redux';
 import undoable, { includeAction } from 'redux-undo';
-import { fromJS } from 'immutable';
+
 import reducer from '../store/reducers/reducer';
+import * as actionCreators from './actions/actionCreators';
+import * as actions from './actions/actions';
 
 const configureStore = (devMode) => {
-  let store;
-  if (devMode) {
-    store = createStore(undoable(reducer, {
-      filter: includeAction([
-        'CHANGE_DIMENSIONS',
-        'DRAW_CELL',
-        'SET_DRAWING',
-        'SET_CELL_SIZE',
-        'SET_RESET_GRID',
-        'NEW_PROJECT'
-      ]),
-      debug: true
-    }));
-
-    /*
-      In production mode, the following actions are already dispatched
-      (Isomorphic app)
-    */
-    store.dispatch({
-      type: 'SET_INITIAL_STATE',
-      state: {}
-    });
-    store.dispatch({
-      type: 'SHOW_SPINNER'
-    });
-  } else {
-    // Collects initial state created in the server side
-    const initialState = window.__INITIAL_STATE__;
-
-    /* Make immutable the initial state */
-    initialState.present = fromJS(initialState.present);
-    initialState.past = initialState.past.map(item => fromJS(item));
-
-    store = createStore(undoable(reducer, {
-      filter: includeAction([
-        'CHANGE_DIMENSIONS',
-        'DRAW_CELL',
-        'SET_DRAWING',
-        'SET_CELL_SIZE',
-        'SET_RESET_GRID',
-        'NEW_PROJECT'
-      ]),
-      debug: false
-    }), initialState);
-  }
+  const store = createStore(undoable(reducer, {
+    filter: includeAction([
+      actions.CHANGE_ACTIVE_FRAME,
+      actions.CHANGE_DIMENSIONS,
+      actions.DRAW_CELL,
+      actions.CLEAR_CELL,
+      actions.SET_ACTIVE_TOOL,
+      actions.SET_CELL_SIZE,
+      actions.SET_CURRENT_COLOR,
+      actions.RESET_GRID,
+      actions.NEW_PROJECT
+    ]),
+    debug: devMode
+  }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
   return store;
 };

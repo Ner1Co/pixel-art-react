@@ -31,7 +31,8 @@
   "babel": {
     "presets": [
       "es2015",
-      "react"
+      "react",
+      "stage-2"
     ]
   },
   "dependencies": {
@@ -67,8 +68,8 @@
     "radium": "^0.18.1",
     "react": "^15.4.2",
     "react-addons-css-transition-group": "^15.4.2",
-    "react-addons-pure-render-mixin": "^15.4.2",
     "react-addons-perf": "^15.4.2",
+    "react-addons-pure-render-mixin": "^15.4.2",
     "react-addons-shallow-compare": "^15.4.2",
     "react-alert": "^1.0.14",
     "react-color": "^2.11.1",

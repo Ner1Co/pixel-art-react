@@ -1,50 +1,55 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as actionCreators from '../store/actions/actionCreators';
-import GridWrapper from './GridWrapper';
 
-const PixelCanvas = (props) => {
-  const cells = props.activeFrame.get('grid').map((currentCell, i) => {
-    const color = currentCell.get('color');
+import { cellClicked } from '../store/actions/actionCreators';
+import { framesSelector, toolsSelector, paletteGridSelector } from '../store/selectors/selectors';
+import tools from '../store/tools';
+import GridWrapper from './presentational/GridWrapper';
+
+class PixelCanvas extends React.Component {
+  render() {
+    let gridExtraClass = 'cell';
+    if (this.props.activeTool === tools.eraser) {
+      gridExtraClass = 'context-menu';
+    } else if (this.props.activeTool === tools.eyedropper) {
+      gridExtraClass = 'copy';
+    }
+
+    return (
+      <GridWrapper
+        cells={this.props.cells}
+        onCellEvent={(id) =>
+          this.props.cellClicked(id, this.props.activeFrameIndex, this.props.activeTool,
+           this.props.cells[id].color, this.props.currentColor)
+        }
+        extraClass={gridExtraClass}
+      />
+    );
+  }
+}
+
+const mapStateToProps = (state) => {
+  const cells = framesSelector(state).activeFrame.grid.map((currentCell, i) => {
+    const color = currentCell.color;
     return {
       id: i,
-      width: 100 / props.columns,
+      width: 100 / framesSelector(state).activeFrame.columns,
       color,
     };
   });
 
-  const onCellEvent = id => props.actions.drawCell(id);
-
-  let gridExtraClass = 'cell';
-  if (props.eraserOn) {
-    gridExtraClass = 'context-menu';
-  } else if (props.eyedropperOn) {
-    gridExtraClass = 'copy';
-  }
-
-  return (
-    <GridWrapper
-      cells={cells}
-      onCellEvent={onCellEvent}
-      extraClass={gridExtraClass}
-    />
-  );
-};
-
-const mapStateToProps = (state) => {
-  const frames = state.present.get('frames');
-  const activeFrameIndex = state.present.get('activeFrameIndex');
   return {
-    activeFrame: frames.get(activeFrameIndex),
-    columns: state.present.get('columns'),
-    eyedropperOn: state.present.get('eyedropperOn'),
-    eraserOn: state.present.get('eraserOn')
+    activeFrame: framesSelector(state).activeFrame,
+    activeFrameIndex: framesSelector(state).activeFrameIndex,
+    currentColor: paletteGridSelector(state).currentColor,
+    activeTool: toolsSelector(state).activeTool,
+    cells: cells
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(actionCreators, dispatch)
+  cellClicked: bindActionCreators(cellClicked, dispatch)
 });
 
 const PixelCanvasContainer = connect(

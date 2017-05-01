@@ -2,8 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Scrollbars } from 'react-custom-scrollbars';
+
 import * as actionCreators from '../store/actions/actionCreators';
-import Frame from './Frame';
+import { framesSelector } from '../store/selectors/selectors';
+import Frame from './presentational/Frame';
 
 class FramesHandler extends React.Component {
   constructor(props) {
@@ -21,7 +23,7 @@ class FramesHandler extends React.Component {
   getFrames() {
     return this.props.frames.map((frameData, index) =>
       <Frame
-        key={frameData.get('key')}
+        key={frameData.key}
         data-id={index}
         frame={frameData}
         columns={this.props.columns}
@@ -42,7 +44,6 @@ class FramesHandler extends React.Component {
     this.props.actions.createNewFrame();
     this.setState({ newFrame: true });
   }
-
 
   render() {
     return (
@@ -71,10 +72,10 @@ class FramesHandler extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  frames: state.present.get('frames'),
-  columns: state.present.get('columns'),
-  rows: state.present.get('rows'),
-  activeFrameIndex: state.present.get('activeFrameIndex')
+  frames: framesSelector(state).frames,
+  columns: framesSelector(state).activeFrame.columns,
+  rows: framesSelector(state).activeFrame.rows,
+  activeFrameIndex: framesSelector(state).activeFrameIndex
 });
 
 const mapDispatchToProps = dispatch => ({

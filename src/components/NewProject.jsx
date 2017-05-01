@@ -1,17 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
 import * as actionCreators from '../store/actions/actionCreators';
 
 const NewProject = (props) => {
-  const newProject = () => {
-    props.actions.newProject();
-  };
-
   return (
     <div className="new-project">
       <button
-        onClick={() => { newProject(); }}
+        onClick={props.onClick}
       >
         NEW
       </button>
@@ -19,9 +16,11 @@ const NewProject = (props) => {
   );
 };
 
-const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(actionCreators, dispatch)
-});
+const mapDispatchToProps = (dispatch) => {
+  return {
+    // Your code here.
+  };
+};
 
 const NewProjectContainer = connect(
   null,

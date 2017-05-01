@@ -1,5 +1,4 @@
 import React from 'react';
-import CookieBanner from 'react-cookie-banner';
 import PixelCanvasContainer from './PixelCanvas';
 import CellSizeContainer from './CellSize';
 import ColorPickerContainer from './ColorPicker';
@@ -13,12 +12,9 @@ import EyedropperContainer from './Eyedropper';
 import FramesHandlerContainer from './FramesHandler';
 import PaletteGridContainer from './PaletteGrid';
 import ResetContainer from './Reset';
-import SaveDrawingContainer from './SaveDrawing';
 import NewProjectContainer from './NewProject';
-import SimpleNotificationContainer from './SimpleNotification';
 import SimpleSpinnerContainer from './SimpleSpinner';
 import UndoRedoContainer from './UndoRedo';
-import initialSetup from '../utils/startup';
 
 export default class App extends React.Component {
   constructor() {
@@ -32,7 +28,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    initialSetup(this.props.dispatch, localStorage);
+    // initialSetup(this.props.dispatch)
   }
 
   changeModalType(type) {
@@ -62,11 +58,6 @@ export default class App extends React.Component {
     return (
       <div className="app__main">
         <SimpleSpinnerContainer />
-        <SimpleNotificationContainer
-          fadeInTime={1000}
-          fadeOutTime={1500}
-          duration={1500}
-        />
         <div
           className="app__frames-container"
           data-tooltip={
@@ -93,29 +84,7 @@ export default class App extends React.Component {
                     }
                   >
                     <NewProjectContainer />
-                  </div>
-                  <div className="app__load-save-container">
-                    <button
-                      className="app__load-button"
-                      onClick={() => { this.changeModalType('load'); }}
-                      data-tooltip={
-                        this.state.helpOn ?
-                        'Load projects you stored before'
-                        : null
-                      }
-                    >
-                      LOAD
-                    </button>
-                    <div
-                      data-tooltip={
-                        this.state.helpOn ?
-                        'Save your project'
-                        : null
-                      }
-                    >
-                      <SaveDrawingContainer />
-                    </div>
-                  </div>
+                  </div> 
                   <div
                     data-tooltip={
                       this.state.helpOn ?
@@ -181,43 +150,6 @@ export default class App extends React.Component {
                   >
                     css
                   </button>
-                </div>
-                <div className="app__mobile--group">
-                  <div className="app__social-container">
-                    <div
-                      data-tooltip={
-                        this.state.helpOn ?
-                        'Tweet your creation in different formats'
-                        : null
-                      }
-                    >
-                      <button
-                        className="app__twitter-button"
-                        onClick={() => { this.changeModalType('twitter'); }}
-                      />
-                    </div>
-                    <div
-                      data-tooltip={
-                        this.state.helpOn ?
-                        'Download your creation in different formats'
-                        : null
-                      }
-                    >
-                      <button
-                        className="app__download-button"
-                        onClick={() => { this.changeModalType('download'); }}
-                      />
-                    </div>
-                    <div data-tooltip="Toggle help tooltips">
-                      <button
-                        className={
-                          `app__toggle-help-button
-                          ${this.state.helpOn ? ' selected' : ''}`
-                        }
-                        onClick={() => { this.toggleHelp(); }}
-                      />
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -286,25 +218,6 @@ export default class App extends React.Component {
         <div className="css-container">
           <CssDisplayContainer />
         </div>
-        {this.state.showCookiesBanner ?
-          <CookieBanner
-            disableStyle
-            message="
-              This website uses cookies. By continuing to use
-              this website you are giving consent to cookies
-              being used. Thank you. "
-            link={{
-              msg: '',
-              url: 'http://www.jvrpath.com/pixelarttocss/cookies.html',
-              target: '_blank'
-            }}
-            onAccept={() => this.hideCookiesBanner()}
-            cookie="user-has-accepted-cookies"
-            dismissOnScroll={false}
-          />
-        :
-          null
-        }
         <ModalContainer
           type={this.state.modalType}
           isOpen={this.state.modalOpen}

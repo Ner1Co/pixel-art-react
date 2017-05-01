@@ -2,8 +2,8 @@ export function generatePixelDrawCss(frame, columns, rows, cellSize, type) {
   switch (type) {
     case 'array': {
       // Returns frame data as an array
-      const frameData = frame.get('grid').reduce((accumulator, currentValue, i) => {
-        if (currentValue.get('used')) {
+      const frameData = frame.grid.reduce((accumulator, currentValue, i) => {
+        if (currentValue.used) {
           const xCoord = ((i % columns) * cellSize) + cellSize;
           const yCoord = (parseInt(i / columns, 10) * cellSize) + cellSize;
           const pixelInfo = [];
@@ -11,7 +11,7 @@ export function generatePixelDrawCss(frame, columns, rows, cellSize, type) {
           pixelInfo.push(`${xCoord}`);
           pixelInfo.push(`${yCoord}`);
           pixelInfo.push('0');
-          pixelInfo.push(currentValue.get('color'));
+          pixelInfo.push(currentValue.color);
           accumulator.push(pixelInfo);
         }
 
@@ -21,12 +21,12 @@ export function generatePixelDrawCss(frame, columns, rows, cellSize, type) {
     }
     default: {
       // Returns frame data as CSS string. Value: 'string'
-      const cssString = frame.get('grid').reduce((accumulator, currentValue, i) => {
-        if (currentValue.get('used')) {
+      const cssString = frame.grid.reduce((accumulator, currentValue, i) => {
+        if (currentValue.used) {
           const xCoord = ((i % columns) * cellSize) + cellSize;
           const yCoord = (parseInt(i / columns, 10) * cellSize) + cellSize;
 
-          return `${accumulator} ${xCoord}px ${yCoord}px 0 ${currentValue.get('color')},`;
+          return `${accumulator} ${xCoord}px ${yCoord}px 0 ${currentValue.color},`;
         }
 
         return accumulator;
@@ -112,7 +112,7 @@ export function generateAnimationCSSData(frames, intervalData, columns, rows, ce
 */
 export function generateAnimationIntervals(frames) {
   return frames.reduce((acc, frame) => {
-    acc.push(parseFloat(frame.get('interval')));
+    acc.push(parseFloat(frame.interval));
     return acc;
   }, [0]);
 }

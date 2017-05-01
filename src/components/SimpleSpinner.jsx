@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { loadingStateSelector } from '../store/selectors/selectors';
+
 const SimpleSpinner = props =>
   <div className={`simple-spinner${props.loading ? ' display' : ''}`}>
     <div className="circle" />
@@ -8,7 +10,7 @@ const SimpleSpinner = props =>
 ;
 
 const mapStateToProps = state => ({
-  loading: state.present.get('loading')
+  loading: loadingStateSelector(state).loading
 });
 
 const SimpleSpinnerContainer = connect(

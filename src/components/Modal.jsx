@@ -2,14 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ModalReact from 'react-modal';
-import * as actionCreators from '../store/actions/actionCreators';
 
-import RadioSelector from './RadioSelector';
-import LoadDrawing from './LoadDrawing';
-import Preview from './Preview';
-import CopyCSS from './CopyCSS';
-import DownloadDrawing from './DownloadDrawing';
-import TwitterForm from './TwitterForm';
+import RadioSelector from './presentational/RadioSelector';
+import Preview from './presentational/Preview';
+import CopyCSS from './presentational/CopyCSS';
+
+import * as actionCreators from '../store/actions/actionCreators';
+import { framesSelector, settingsSelector, paletteGridSelector } from '../store/selectors/selectors';
 
 class Modal extends React.Component {
   static generateRadioOptions(props) {
@@ -22,7 +21,7 @@ class Modal extends React.Component {
         id: 3
       }];
 
-      if (props.frames.size > 1) {
+      if (props.frames.length > 1) {
         const spritesheetSupport =
         props.type === 'download' ||
         props.type === 'twitter';
@@ -42,12 +41,6 @@ class Modal extends React.Component {
           });
         }
       }
-    } else {
-      options = [
-        { value: 'storage', label: 'Stored', id: 0 },
-        { value: 'import', label: 'Import', id: 1 },
-        { value: 'export', label: 'Export', id: 2 }
-      ];
     }
 
     return options;
@@ -101,28 +94,9 @@ class Modal extends React.Component {
             options={options}
           />
         </div>
-      )
-      ;
+      );
 
     switch (props.type) {
-      case 'load':
-        content = (
-          <LoadDrawing
-            loadType={this.state.loadType}
-            close={props.close}
-            open={props.open}
-            frames={props.frames}
-            columns={props.columns}
-            rows={props.rows}
-            cellSize={props.cellSize}
-            paletteGridData={props.paletteGridData}
-            actions={{
-              setDrawing: props.actions.setDrawing,
-              sendNotification: props.actions.sendNotification
-            }}
-          />
-        );
-        break;
       case 'copycss':
         content = (
           <CopyCSS
@@ -133,39 +107,6 @@ class Modal extends React.Component {
             activeFrameIndex={props.activeFrameIndex}
             animationCode={this.state.previewType !== 'single'}
             duration={props.duration}
-          />
-        );
-        break;
-      case 'download':
-        content = (
-          <DownloadDrawing
-            frames={props.frames}
-            activeFrame={props.activeFrame}
-            columns={props.columns}
-            rows={props.rows}
-            cellSize={props.cellSize}
-            duration={props.duration}
-            downloadType={this.state.previewType}
-            actions={{ sendNotification: props.actions.sendNotification }}
-          />
-        );
-        break;
-      case 'twitter':
-        content = (
-          <TwitterForm
-            maxChars="113"
-            frames={props.frames}
-            activeFrame={props.activeFrame}
-            columns={props.columns}
-            rows={props.rows}
-            cellSize={props.cellSize}
-            duration={props.duration}
-            paletteGridData={props.paletteGridData}
-            tweetType={this.state.previewType}
-            actions={{
-              showSpinner: props.actions.showSpinner,
-              sendNotification: props.actions.sendNotification
-            }}
           />
         );
         break;
@@ -223,17 +164,15 @@ class Modal extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const frames = state.present.get('frames');
-  const activeFrameIndex = state.present.get('activeFrameIndex');
   return {
-    frames,
-    activeFrameIndex,
-    activeFrame: frames.get(activeFrameIndex),
-    paletteGridData: state.present.get('paletteGridData'),
-    columns: state.present.get('columns'),
-    rows: state.present.get('rows'),
-    cellSize: state.present.get('cellSize'),
-    duration: state.present.get('duration')
+    frames: framesSelector(state).frames,
+    activeFrameIndex: framesSelector(state).activeFrameIndex,
+    activeFrame: framesSelector(state).activeFrame,
+    paletteGridData: paletteGridSelector(state).paletteGridColors,
+    columns: framesSelector(state).activeFrame.columns,
+    rows: framesSelector(state).activeFrame.rows,
+    cellSize: settingsSelector(state).cellSize,
+    duration: settingsSelector(state).animationDuration
   };
 };
 

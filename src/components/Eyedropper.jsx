@@ -1,27 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
 import * as actionCreators from '../store/actions/actionCreators';
+import tools from '../store/tools';
+import { toolsSelector } from '../store/selectors/selectors';
 
 const Eyedropper = (props) => {
-  const handleClick = () => {
-    props.actions.setEyedropper();
-  };
-
   return (
     <button
       className={`eyedropper${props.eyedropperOn ? ' selected' : ''}`}
-      onClick={() => { handleClick(); }}
+      onClick={props.onClick}
     />
   );
 };
 
 const mapStateToProps = state => ({
-  eyedropperOn: state.present.get('eyedropperOn'),
+  eyedropperOn: toolsSelector(state).activeTool === tools.eyedropper
 });
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(actionCreators, dispatch)
+  // Your code here.
 });
 
 const EyedropperContainer = connect(

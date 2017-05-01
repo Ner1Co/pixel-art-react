@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+
 import { generatePixelDrawCss } from '../utils/cssParse';
+import { settingsSelector, framesSelector } from '../store/selectors/selectors';
 
 const CssDisplay = (props) => {
   const generateCss = () => {
@@ -25,13 +27,11 @@ const CssDisplay = (props) => {
 };
 
 function mapStateToProps(state) {
-  const frames = state.present.get('frames');
-  const activeFrameIndex = state.present.get('activeFrameIndex');
   return {
-    activeFrame: frames.get(activeFrameIndex),
-    columns: state.present.get('columns'),
-    rows: state.present.get('rows'),
-    cellSize: state.present.get('cellSize')
+    activeFrame: framesSelector(state).activeFrame,
+    columns: framesSelector(state).activeFrame.columns,
+    rows: framesSelector(state).activeFrame.rows,
+    cellSize: settingsSelector(state).cellSize
   };
 }
 

@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
 import * as actionCreators from '../store/actions/actionCreators';
+import { settingsSelector } from '../store/selectors/selectors'
 
 const CellSize = (props) => {
   const handleCellSizeChange = (event) => {
@@ -26,7 +28,7 @@ const CellSize = (props) => {
 };
 
 const mapStateToProps = state => ({
-  cellSize: state.present.get('cellSize')
+  cellSize: settingsSelector(state).cellSize
 });
 
 const mapDispatchToProps = dispatch => ({

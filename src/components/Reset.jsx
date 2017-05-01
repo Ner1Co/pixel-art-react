@@ -1,16 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
 import * as actionCreators from '../store/actions/actionCreators';
+import { framesSelector } from '../store/selectors/selectors';
 
 const Reset = (props) => {
-  const handleClick = () => {
-    props.actions.resetGrid(
-      props.columns,
-      props.rows,
-      props.activeFrameIndex);
-  };
-
   return (
     <button
       className="reset"
@@ -22,13 +17,11 @@ const Reset = (props) => {
 };
 
 const mapStateToProps = state => ({
-  columns: state.present.get('columns'),
-  rows: state.present.get('rows'),
-  activeFrameIndex: state.present.get('activeFrameIndex')
+  activeFrameIndex: framesSelector(state).activeFrameIndex
 });
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(actionCreators, dispatch)
+  // Your code here.
 });
 
 const ResetContainer = connect(

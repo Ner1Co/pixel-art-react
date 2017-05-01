@@ -1,85 +1,106 @@
-# Pixel Art to CSS
-
-<a target='_blank' href='http://www.recurse.com' title='Made at the Recurse Center'><img src='https://cloud.githubusercontent.com/assets/2883345/11325206/336ea5f4-9150-11e5-9e90-d86ad31993d8.png' height='20px'/></a>
-
-### Did you know that you can draw and animate pixel art using CSS?
-
-**pixel-art-react** is a handy and intuitive tool, that can help you to design your awesome drawings and animations!
-
-Try to draw some pixels on the screen, **pixel-art-react** will generate the CSS code using **box-shadow** property.
-
-Create as much drawings as you want in your project adding new frames and then check them in motion! it will use CSS **keyframes** to get the animation done and the CSS code will be ready to use in your HTML blocks.
-
-Please check the following example:
-
-![pixel-art-react](screenshots/screenshot-cat.png)
-
-The app layout is responsive and adjust itself to the screen width. You can see different layout examples (desktop and mobile) in the screenshot.
-
-The project is built with **React**, **Redux** and **ImmutableJS**. Trying to avoid side-effects in a functional way of programming.
-
-You will be able to **load**, **save**, **import**, **export** projects, **undo** **redo** your actions, change grid properties, **share** your drawings/animations and **download** them, everything in a very easy and fast way.
-
-Check the results of this simple project:
-
+# Pixel Art to CSS - Redux Exercise
+##### See the original app live at [pixelartcss](http://www.pixelartcss.com/)
 ![](screenshots/animation-cat.gif)
 
-##### See it live at [pixelartcss](http://www.pixelartcss.com/)
+This exercise will get you familiar with Redux actions, reducers composition and mapping state to views. All you should care about is the model and the state (you shouldn't worry about the view layer, it's already there). 
+> Get comfortable with [javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript).
 
-## Example
+---
 
-You can find an example project data ready to import [here](examples/import-export/cat.txt).
 
-In addition a project will be loaded by default, check this out clicking on the **LOAD** button. Of course you can delete this project anytime you want.
+## Setup and run
 
-## Technical overview
-
-This application has been built with the following technologies:
-
-- [React](https://facebook.github.io/react/): Library to build the UI
-- [Redux](http://redux.js.org/): Implements a Flux like architecture
-- [ImmutableJS](https://facebook.github.io/immutable-js/) Helps to keep the data immutable
-- [PostCSS](https://github.com/postcss/postcss) Handle the app CSS
-- [NodeJS](https://nodejs.org/en/) + [Express](http://expressjs.com/) (Server side to build an universal application, create and serve the generated drawings)
-
-## Installation
+Clone this repo, then install node packages and run:
 
 ```bash
+git clone https://github.com/Ner1Co/pixel-art-react.git
+
+cd pixel-art-react
 npm install
-```
-
-## Development
-
-If you just want to develop the interface with no need of back-end side, take advance of ```webpack-dev-server``` and ```react-hot-loader```.
-
-```bash
 npm run development
 ```
 
-## Deploy
+The app will run at  http://localhost:8080 with hot reloading.
 
-Create the final build and run the generated react html on a express server making in an isomorphic way.
 
+ If you don't have npm installed:
 ```bash
-npm run deploy
-
-npm run server
+brew install node
 ```
+ 
+---
+ 
+ ## Redux
 
-A ```config.json``` is needed for deployment with the Twitter and express keys.
+Under `store` directory, you can find `actions.js` for [actions](http://redux.js.org/docs/basics/Actions.html#actions) constants, `actionCreators.js` for all the [action creators](http://redux.js.org/docs/basics/Actions.html#action-creators), `reducer.js` for all the [reducers](http://redux.js.org/docs/basics/Reducers.html) and `selectors.js` for state selectors.
+Feel free to move or change everything as you like, you also can jump between different parts of the exercise.
 
+All the React views are under the `components` directory.
+
+Enjoy!
+
+### Step 1: New Project
+
+The app is loaded with a snapshot of initial state, we love cats - but we also want to start our own new draw.
+
+There is an action called `NEW_PROJECT`, and `newProject` action creator:
+  1.  In `NewProject.jsx` component file, map the dispatching `NEW_PROJECT` action to the button click event.
+      The function `mapDispatchToProps` must return an object with a `onClick` key (the component input), and a value that is a function with no parameters that dispatch your action.
+
+    { onClick: () => dispatch(yourActionObject) }
+     
+ Now, on every `New` button click, an action is dispatched to the reducer. You can see all the logged actions in the browser console or with [redux-dev-tools extension](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd).
+  
+2.  Handle `NEW_PROJECT` action in your root reducer and return a new state. You can use the helper function `newProject` for getting a new state with default values.
+
+> Suggested  [solution](https://github.com/Ner1Co/pixel-art-react/commit/f882c2c2a9d3f288ee1a466d3db2426d15c36fad).
+  
+### Step 2: Draw
+
+Clicking on the grid is already mapped to an action creator called `cellClicked` in the `PixelCanvas.jsx` component.
+  1. Create a corresponding action and handle this action in the reducer. Return new state when the clicked cell in the active frame is filled with color.
+    **Remember**: The state is immutable, use [spread operator](https://developer.mozilla.org/he/docs/Web/JavaScript/Reference/Operators/Spread_operator), and [map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map?v=control).
+  2. Use [reducers composition](http://redux.js.org/docs/basics/Reducers.html#splitting-reducers) in order to handle the `frames` piece of state separately.
+   
+  > **Note:**  Copying the frame grid on each draw, may not the best solution -  it's only for simplicity.
+  
+  > Read more about [Persistent data structures](https://en.wikipedia.org/wiki/Persistent_data_structure) and [Immutable.js](https://facebook.github.io/immutable-js/) and [Performance](http://redux.js.org/docs/faq/Performance.html).
+  
+  ---
+
+>  Suggested [solution](https://github.com/Ner1Co/pixel-art-react/commit/a432ce313dcb555f817c5f18b7819ebecadd45ab).
+
+### Step 3: Frames
+  This step is a good example of how [different reducers](http://redux.js.org/docs/faq/Reducers.html#reducers-share-state) can handle the same action.
+
+  1. Create `changeActiveFrame` and `createNewFrame` action creators and corresponding actions, then handle the actions in your `frames` and `activeFrameIndex` reducers. The action creators are already connected to the `FrameHandler.jsx` component. Use the helper functions from `/utils/frame.js`.
+
+  2. (**Extra**) Do the same for `deleteFrame`, `duplicateFrame`, `changeFrameInterval`, `changeDimensions` and `resetGrid` action creators.
+  
+  > **Note:** In this stage the reducer file become larger and you are encouraged to read [this](http://redux.js.org/docs/faq/CodeStructure.html), and refactor your code shape.
+  **Remember:** action creators and reducers are just functions, you can do any change that suits your case.
+  
+ Congratulations! if you have finished this part, you can create an animation from multiple frames.
+
+> Suggested  [solution](https://github.com/Ner1Co/pixel-art-react/commit/249aa0a68c5c616e15a9b5e8629920a9640c79d1) and [extra](https://github.com/Ner1Co/pixel-art-react/commit/0de4c4ef92b33d8ae49744485456c1977481371c).
+
+### Step 4: (Extra) Color and Tools
+ 
+  Add functionality for color selection, tools selection, erasing and color picking.
+  
+> Suggested  [solution](https://github.com/Ner1Co/pixel-art-react/commit/6e14b49299c68c89865ca4ce34f67db3bfacee26).
+ 
 ## Testing
+
+Reducers and action creators are [easy to test](http://redux.js.org/docs/recipes/WritingTests.html#reducers), feel free to write your own tests under `test` directory. Make sure your file have `_spec` suffix, and run:
 
 ```bash
 npm run test
 ```
 
-## Contributing
-#### Help me to improve it, share and enjoy :)
-Please create a Github issue if there is something wrong or to be improved. Pull request are also welcome and they can be created to the develop branch.
-
-
 ## License
 
 [MIT](https://opensource.org/licenses/mit-license.php)
 Copyright © 2016 Javier Valencia Romero (@jvalen)
+
+

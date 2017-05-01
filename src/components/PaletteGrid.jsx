@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as actionCreators from '../store/actions/actionCreators';
-import PaletteColor from './PaletteColor';
+
+import PaletteColor from './presentational/PaletteColor';
+import { setCurrentColor } from '../store/actions/actionCreators';
+import { paletteGridSelector } from '../store/selectors/selectors';
 
 const PaletteGrid = (props) => {
   const getColors = () => {
@@ -11,12 +12,12 @@ const PaletteGrid = (props) => {
 
     return paletteGridData.map((color, i) =>
       <PaletteColor
-        key={color.get('id')}
+        key={color.color + i}
         positionInPalette={i}
         width={width}
-        color={color.get('color')}
-        selected={currentColor.get('position') === i}
-        actions={{ setColorSelected: props.actions.setColorSelected }}
+        color={color.color}
+        selected={currentColor === color.color}
+        onClick={props.onColorCellClick}
       />
     );
   };
@@ -29,12 +30,14 @@ const PaletteGrid = (props) => {
 };
 
 const mapStateToProps = state => ({
-  paletteGridData: state.present.get('paletteGridData'),
-  currentColor: state.present.get('currentColor')
+  paletteGridData: paletteGridSelector(state).colors,
+  currentColor: paletteGridSelector(state).currentColor
 });
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(actionCreators, dispatch)
+  onColorCellClick: (color, positionInPalette) => {
+    dispatch(setCurrentColor(color, positionInPalette));
+  }
 });
 
 const PaletteGridContainer = connect(
