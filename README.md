@@ -53,7 +53,9 @@ There is an action called `NEW_PROJECT`, and `newProject` action creator:
   
 2.  Handle `NEW_PROJECT` action in your root reducer and return a new state. You can use the helper function `newProject` for getting a new state with default values.
 
-> Suggested  [solution](https://github.com/Ner1Co/pixel-art-react/commit/f882c2c2a9d3f288ee1a466d3db2426d15c36fad).
+> Suggested  [solution](https://github.com/Ner1Co/pixel-art-react/commit/ac7303916874258460e337628e7c023b3de93a90).
+
+---
   
 ### Step 2: Draw
 
@@ -66,9 +68,11 @@ Clicking on the grid is already mapped to an action creator called `cellClicked`
   
   > Read more about [Persistent data structures](https://en.wikipedia.org/wiki/Persistent_data_structure) and [Immutable.js](https://facebook.github.io/immutable-js/) and [Performance](http://redux.js.org/docs/faq/Performance.html).
   
-  ---
 
->  Suggested [solution](https://github.com/Ner1Co/pixel-art-react/commit/a432ce313dcb555f817c5f18b7819ebecadd45ab).
+
+>  Suggested [solution](https://github.com/Ner1Co/pixel-art-react/commit/08c5390099e4950e2a555c5a6ff1392bbd931945).
+
+---
 
 ### Step 3: Frames
   This step is a good example of how [different reducers](http://redux.js.org/docs/faq/Reducers.html#reducers-share-state) can handle the same action.
@@ -82,13 +86,17 @@ Clicking on the grid is already mapped to an action creator called `cellClicked`
   
  Congratulations! if you have finished this part, you can create an animation from multiple frames.
 
-> Suggested  [solution](https://github.com/Ner1Co/pixel-art-react/commit/249aa0a68c5c616e15a9b5e8629920a9640c79d1) and [extra](https://github.com/Ner1Co/pixel-art-react/commit/0de4c4ef92b33d8ae49744485456c1977481371c).
+> Suggested  [solution](https://github.com/Ner1Co/pixel-art-react/commit/0fedd6f477bdc1f8e539c1f1b402b7301d981d7f) and [extra](https://github.com/Ner1Co/pixel-art-react/commit/4d7ec136dcc25f1afdfc5ae50768fc996a1c0710).
+
+---
 
 ### Step 4: (Extra) Color and Tools
  
   Add functionality for color selection, tools selection, erasing and color picking.
   
-> Suggested  [solution](https://github.com/Ner1Co/pixel-art-react/commit/6e14b49299c68c89865ca4ce34f67db3bfacee26).
+> Suggested  [solution](https://github.com/Ner1Co/pixel-art-react/commit/6e67ef2eebf3ee5a8d61b5c28ce501d42d7a52aa).
+
+---
  
 ## Testing
 
